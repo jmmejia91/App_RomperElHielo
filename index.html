@@ -2,37 +2,145 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Experiencias de Marca 2.0</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro de Experiencia - Experiencias de Marca</title>
     <style>
-        body { font-family: sans-serif; text-align: center; background: #f4f4f4; }
-        .container { background: white; padding: 20px; border-radius: 10px; display: inline-block; margin-top: 50px; }
-        img { max-width: 200px; }
-        input { display: block; margin: 10px auto; padding: 8px; width: 80%; }
-        button { background: #007bff; color: white; border: none; padding: 10px 20px; cursor: pointer; }
+        /* Estilos inspirados en la UI de Google Apps Script */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+        img {
+            max-width: 180px;
+            margin-bottom: 20px;
+        }
+        h2 {
+            color: #333;
+            font-size: 1.5rem;
+            margin-bottom: 25px;
+            font-weight: 600;
+        }
+        .form-group {
+            text-align: left;
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 5px;
+            margin-left: 2px;
+        }
+        input, select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-sizing: border-box; /* Crucial para el ancho */
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+        input:focus, select:focus {
+            outline: none;
+            border-color: #007bff;
+        }
+        button {
+            width: 100%;
+            padding: 14px;
+            background-color: #000; /* Negro como en tu captura */
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #333;
+        }
     </style>
 </head>
 <body>
+
     <div class="container">
-        <img src="LOGO EXPERIENCIAS DE MARCA 2.0.pdf.png" alt="Logo Experiencias de Marca">
+        <img src="LOGO%20EXPERIENCIAS%20DE%20MARCA%202.0.pdf.png" alt="Experiencias de Marca">
         
-        <h1>Registro de Experiencia</h1>
-        <form id="miFormulario">
-            <input type="text" name="nombre" placeholder="Nombre" required>
-            <input type="email" name="correo" placeholder="Correo" required>
-            <button type="submit">Enviar a Sheets</button>
+        <h2>Registro de Ganador</h2>
+        
+        <form id="registroForm">
+            <div class="form-group">
+                <label>Nombre del Ganador</label>
+                <input type="text" name="nombre" placeholder="Ej: Juan Perez" required>
+            </div>
+            
+            <div class="form-group">
+                <label>Teléfono</label>
+                <input type="tel" name="telefono" placeholder="Ej: 3001234567" required>
+            </div>
+            
+            <div class="form-group">
+                <label>Correo Electrónico</label>
+                <input type="email" name="correo" placeholder="ejemplo@correo.com" required>
+            </div>
+            
+            <div class="form-group">
+                <label>Premio Ganado</label>
+                <select name="premio" required>
+                    <option value="" disabled selected>Selecciona un premio</option>
+                    <option value="25% de descuento">25% de descuento</option>
+                    <option value="Bono Regalo">Bono Regalo</option>
+                    <option value="Experiencia VIP">Experiencia VIP</option>
+                </select>
+            </div>
+            
+            <button type="submit" id="btnEnviar">Registrar Ganador</button>
         </form>
     </div>
 
     <script>
+        // La URL de tu captura
         const scriptURL = 'https://script.google.com/macros/s/AKfycbzSXnx4KBxieVyyuNZnvRqYfkxzCYTCuI7XSLnlLL2gvqX5fs3dUEWtf10_1Wv898v1/exec';
-        const form = document.getElementById('miFormulario');
+        const form = document.getElementById('registroForm');
+        const btn = document.getElementById('btnEnviar');
 
         form.addEventListener('submit', e => {
             e.preventDefault();
+            btn.disabled = true;
+            btn.innerText = 'Enviando...';
+
             fetch(scriptURL, { method: 'POST', body: new FormData(form)})
-                .then(response => alert('¡Datos enviados con éxito!'))
-                .catch(error => console.error('Error!', error.message));
+                .then(response => {
+                    alert('¡Registro guardado con éxito en el Sheets!');
+                    form.reset();
+                    btn.disabled = false;
+                    btn.innerText = 'Registrar Ganador';
+                })
+                .catch(error => {
+                    console.error('Error!', error.message);
+                    alert('Hubo un error al enviar los datos.');
+                    btn.disabled = false;
+                    btn.innerText = 'Registrar Ganador';
+                });
         });
     </script>
+
 </body>
 </html>
